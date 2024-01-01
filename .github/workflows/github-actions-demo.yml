@@ -21,18 +21,23 @@ jobs:
 
 
 
-      - name: Check out repository code
+      -
+        name: Check out repository code
         uses: actions/checkout@v4
 
 
-      - name: pwd
+      -
+        name: pwd
         run: |
             pwd
-      - name: ls_pwd
+      -
+        name: ls_pwd
         run: |
             ls -lR $(pwd)
 
-
+      -
+        name: Install Dagger
+        run: go get dagger.io/dagger@latest
       - name: Dagger Build
         run: |
             go run build_pipeline/*.go
