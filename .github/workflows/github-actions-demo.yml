@@ -33,7 +33,7 @@ jobs:
             ls -lR $(pwd)
 
 
-      - name: Dagger build
+      - name: Dagger Build
         run: |
             go run build_pipeline/*.go
 
