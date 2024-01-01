@@ -33,9 +33,9 @@ jobs:
       -
         name: Install Dagger 
         run: go get dagger.io/dagger@latest
-      # -
-      #   name: Install Dagger CLI
-      #   run: cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | sh; cd -; }
+      -
+        name: Install Dagger CLI
+        run: cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | sh; cd -; }
       - name: Dagger Build
         run: |
             go run build_pipeline/*.go
