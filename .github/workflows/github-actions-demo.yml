@@ -8,8 +8,9 @@ on: [push]
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
-    container:
-        image: golang:1.21.5-bullseye
+    # TODO: I guess I don't need to do this??
+    # container:
+    #     image: golang:1.21.5-bullseye
     steps:
       -
         name: Echo Build Info
@@ -23,8 +24,7 @@ jobs:
       -
         name: Check out repo
         uses: actions/checkout@v4
-
-
+      ##################### BUILD SETUP #####################
       -
         name: Setup Go
         uses: actions/setup-go@v4
@@ -33,14 +33,10 @@ jobs:
       -
         name: Install Dagger 
         run: go get dagger.io/dagger@latest
-      -
-        name: Install Dagger CLI
-        run: cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | sh; cd -; }
+      # -
+      #   name: Install Dagger CLI
+      #   run: cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | sh; cd -; }
+      ##################### BUILD #####################
       - name: Dagger Build
         run: |
             go run build_pipeline/*.go
-
-
-      - run: echo "============================== BENTEST =============================="
-      - run: echo "------------------------------ BENTEST -------------------------------"
-
