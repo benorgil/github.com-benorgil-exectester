@@ -22,7 +22,8 @@
             },
             "extensions": [
                 "streetsidesoftware.code-spell-checker",
-                "SonarSource.sonarlint-vscode"
+                "SonarSource.sonarlint-vscode",
+                "GitHub.vscode-github-actions"
             ]
         }
     },
