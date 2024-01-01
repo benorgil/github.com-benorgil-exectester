@@ -8,8 +8,6 @@ all: build
 build:
 	go run build_pipeline/*.go
 
-
-
 ############## For testing execution manually ##############
 .PHONY: testrun
 testrun:
