@@ -18,9 +18,12 @@ jobs:
       - run: echo "github.workspace - ${{ github.workspace }}"
       - run: echo "job.status - ${{ job.status }}"
 
-      - name: BENTEST
+      - name: pwd
         run: |
-          pwd
+            pwd
+      - name: ls_pwd
+        run: |
+            ls $(pwd)
 
       # - name: Check out repository code
       #   uses: actions/checkout@v4
