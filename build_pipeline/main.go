@@ -15,8 +15,7 @@ import (
 func main() {
 	bc := GetConfig()
 
-	// This is the only way I could find how to output unhandled
-	// panics in my structured log format
+	// Capture all unhandled panics and output in structured log format
 	// https://stackoverflow.com/questions/60516923/logging-unhandled-golang-panics
 	defer func() {
 		if r := recover(); r != nil {
@@ -28,9 +27,6 @@ func main() {
 	if err := build(context.Background(), bc); err != nil {
 		// If the build fails consider entire pipeline failed and
 		// halt immediately
-		println("========================")
-		bc.logger.Error(err.Error())
-		println("000000000000000000000000")
 		panic(err)
 	}
 
