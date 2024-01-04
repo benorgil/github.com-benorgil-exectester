@@ -1,3 +1,5 @@
+# TODO document this Makefile
+
 # Force amd64 arch to prevent m1 apple machines from building for arm
 export DOCKER_DEFAULT_PLATFORM:= linux/amd64
 

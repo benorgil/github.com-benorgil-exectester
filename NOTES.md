@@ -22,6 +22,8 @@
 
 ## TODO List  ##
 - Learn about gh actions more
+    - spin up minikube with dagger
+- Publish test reports: https://github.com/EnricoMi/publish-unit-test-result-action
 - Sonar
 - Review my use of pointers
 - Fix exitcode test

@@ -40,14 +40,13 @@ jobs:
       -
         name: Install Dagger 
         run: go get dagger.io/dagger@latest
-      # TODO: IM HERE do I need the cli? Whats it even for?
-      # TODO: Should I call `make` instead here?
-      # -
-      #   name: Install Dagger CLI
-      #   run: cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | sh; cd -; }
+
       ##################### BUILD #####################
-      - name: Dagger Build
-        run: |
-            make
-        # run: |
-        #     go run build_pipeline/*.go
+      # - name: Dagger Build
+      #   run: |
+      #       make
+      # TODO: IM HERE do I need the cli? Whats it even for?
+      - name: Install Dagger CLI
+        run: cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | sh; cd -; }
+      - name: Run Dagger pipeline
+        run: dagger run go run main.go
