@@ -13,10 +13,17 @@ import (
 
 func main() {
 	bc := GetConfig()
+	defer func() {
+		if r := recover(); r != nil {
+			bc.logger.Error("Captured panic: %v", r)
+			os.Exit(1)
+		}
+	}()
 
 	if err := build(context.Background(), bc); err != nil {
 		// If the build fails consider entire pipeline failed and
 		// halt immediately
+		println("========================")
 		bc.logger.Error(err.Error())
 		println("000000000000000000000000")
 		panic(err)
