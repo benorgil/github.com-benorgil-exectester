@@ -17,6 +17,7 @@ func main() {
 	if err := build(context.Background(), bc); err != nil {
 		// If the build fails consider entire pipeline failed and
 		// halt immediately
+		bc.logger.Error(err.Error())
 		println("000000000000000000000000")
 		panic(err)
 	}
