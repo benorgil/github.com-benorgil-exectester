@@ -33,6 +33,7 @@ jobs:
       # TODO: what is "actions/setup-go@v4" doing???
       -
         name: Setup Go
+        # See for source: https://github.com/actions/checkout
         uses: actions/setup-go@v4
         with:
           go-version: '>=1.20'
