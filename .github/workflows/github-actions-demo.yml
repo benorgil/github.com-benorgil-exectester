@@ -1,11 +1,13 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
 on:
+    # Triggers on push to remote
     push:
+        # For specific branches
+        # branches: [main]
+    # The workflow_dispatch event adds a button we can use to manually trigger
     workflow_dispatch:
-# on: 
-#     push:
-#         branches: [main]
 
 jobs:
   Explore-GitHub-Actions:
@@ -23,7 +25,7 @@ jobs:
             echo "github.ref - ${{ github.ref }}"
             echo "github.repository - ${{ github.repository }}"
             echo "github.workspace - ${{ github.workspace }}"
-            echo "job.status - ${{ job.status }}"       
+            echo "job.status - ${{ job.status }}"
       -
         name: Check out repo
         uses: actions/checkout@v4
@@ -38,10 +40,13 @@ jobs:
         name: Install Dagger 
         run: go get dagger.io/dagger@latest
       # TODO: IM HERE do I need the cli? Whats it even for?
+      # TODO: Should I call `make` instead here?
       # -
       #   name: Install Dagger CLI
       #   run: cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | sh; cd -; }
       ##################### BUILD #####################
       - name: Dagger Build
         run: |
-            go run build_pipeline/*.go
+            make
+        # run: |
+        #     go run build_pipeline/*.go
