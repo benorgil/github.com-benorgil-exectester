@@ -7,15 +7,20 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"runtime/debug"
 
 	"dagger.io/dagger"
 )
 
 func main() {
 	bc := GetConfig()
+
+	// This is the only way I could find how to output unhandled
+	// panics in my structured log format
+	// https://stackoverflow.com/questions/60516923/logging-unhandled-golang-panics
 	defer func() {
 		if r := recover(); r != nil {
-			bc.logger.Error("Captured panic: %v", r)
+			bc.logger.Error("Captured panic: %v", r, debug.Stack())
 			os.Exit(1)
 		}
 	}()
