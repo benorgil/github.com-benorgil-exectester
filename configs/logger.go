@@ -14,14 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/*
-# Initial config
-
-I want to consolidate things like logger initialization and build/test
-config in a single place. While Viper is used for config handling of the
-cli app itself the config here needs to be initialized before the Cobra
-app itself- so I don't think I can use Viper here.
-*/
 package configs
 
 import (

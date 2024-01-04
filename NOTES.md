@@ -37,7 +37,6 @@
 
 
 - Make TestSocket a separate package
-    - // TODO: could this accept a func to run assert instead of *ExecTestSuite??? it would have to be a new struct for testSocket
 - Maybe add super verbose logging that returns hostname and bunch of other stuff?
     - An excuse to add fields to the log output
 - Maybe hack on sphinx + godoc

@@ -11,35 +11,20 @@ import (
 	"dagger.io/dagger"
 )
 
-// Define build and test params matrix
-var (
-	oses   = []string{"linux", "darwin", "windows"}
-	arches = []string{"amd64", "arm64"}
-	// Name of compiled exe
-	exe_name = "et"
-	// Build artifact directory
-	build_dir = "build"
-	// Tell integration tests where to find compiled exe
-	// The cwd of the test run will be the package folder, go up a dir to get at "./build"
-	TestArgExePath = "../build/linux/arm64/et"
-	// Coverage report path
-	coverageReport = "./build/cov.out"
-)
-
 func main() {
 	bc := GetConfig()
 
 	if err := build(context.Background(), bc); err != nil {
-		bc.Logger.Error(err.Error())
+		bc.logger.Error(err.Error())
 	}
 
 	if err := test(context.Background(), bc); err != nil {
-		bc.Logger.Error(err.Error())
+		bc.logger.Error(err.Error())
 	}
 }
 
 func build(ctx context.Context, bc *BuildConfig) error {
-	bc.Logger.Info("Building with Dagger")
+	bc.logger.Info("Building with Dagger")
 
 	// initialize Dagger client
 	client, err := dagger.Connect(ctx, dagger.WithLogOutput(os.Stderr))
@@ -55,16 +40,16 @@ func build(ctx context.Context, bc *BuildConfig) error {
 	outputs := client.Directory()
 
 	// get `golang` image
-	golang := client.Container().From("golang:latest")
+	golang := client.Container().From(bc.builderImage)
 
 	// mount cloned repository into `golang` image
-	golang = golang.WithDirectory("/src", src).WithWorkdir("/src")
+	golang = golang.WithDirectory(bc.workDir, src).WithWorkdir(bc.workDir)
 
 	for _, goos := range oses {
 		for _, goarch := range arches {
 			// create a directory for each os and arch
-			path := fmt.Sprintf("%s/%s/%s/", build_dir, goos, goarch)
-			exePath := path + exe_name
+			path := fmt.Sprintf("%s/%s/%s/", bc.buildDir, goos, goarch)
+			exePath := path + bc.exeName
 
 			// set GOARCH and GOOS in the build environment
 			build := golang.WithEnvVariable("GOOS", goos)
@@ -87,7 +72,7 @@ func build(ctx context.Context, bc *BuildConfig) error {
 }
 
 func test(ctx context.Context, bc *BuildConfig) error {
-	bc.Logger.Info("Testing with Dagger")
+	bc.logger.Info("Testing with Dagger")
 
 	// initialize Dagger client
 	client, err := dagger.Connect(ctx, dagger.WithLogOutput(os.Stderr))
@@ -103,17 +88,17 @@ func test(ctx context.Context, bc *BuildConfig) error {
 	outputs := client.Directory()
 
 	// get `golang` image
-	golang := client.Container().From("golang:latest")
+	golang := client.Container().From(bc.builderImage)
 
 	// mount cloned repository into `golang` image
-	golang = golang.WithDirectory("/src", src).WithWorkdir("/src")
+	golang = golang.WithDirectory(bc.workDir, src).WithWorkdir(bc.workDir)
 
 	// Run test suite
-	test := golang.WithEnvVariable(bc.TestArgExePath, TestArgExePath)
-	test = test.WithExec([]string{"go", "test", "./...", "-coverprofile=" + coverageReport})
+	test := golang.WithEnvVariable(bc.testArgExePathEnvVar, bc.testArgExePath)
+	test = test.WithExec([]string{"go", "test", "./...", "-coverprofile=" + bc.coverageReport})
 
 	// get reference to build output directory in container
-	path := build_dir + "/"
+	path := bc.buildDir + "/"
 	outputs = outputs.WithDirectory(path, test.Directory(path))
 
 	// write build artifacts to host
