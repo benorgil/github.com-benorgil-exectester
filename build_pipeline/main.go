@@ -16,7 +16,9 @@ func main() {
 
 	if err := build(context.Background(), bc); err != nil {
 		bc.logger.Error(err.Error())
+		println("00000000000000000000000000000000000000000000")
 		panic(err)
+		println("00000000000000000000000000000000000000000000")
 	}
 
 	if err := test(context.Background(), bc); err != nil {
