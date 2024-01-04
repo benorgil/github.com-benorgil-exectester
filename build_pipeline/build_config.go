@@ -37,7 +37,8 @@ type BuildConfig struct {
 	testArgExePathEnvVar string
 	// The actual path of the exe
 	testArgExePath string
-	// The logger build automation will use for output
+	// The logger build automation will use for output.
+	// Uses the "fallback" logger because we don't need anything custom here
 	logger *slog.Logger
 }
 
