@@ -1,14 +1,17 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+on:
+    push:
+    workflow_dispatch:
 # on: 
 #     push:
 #         branches: [main]
 
 jobs:
   Explore-GitHub-Actions:
+    # "runs-on" specifies the github hosted VM (not a container image- I think)
     runs-on: ubuntu-latest
-    # TODO: I guess I don't need to do this??
+    # To run inside of a container on the github hosted VM
     # container:
     #     image: golang:1.21.5-bullseye
     steps:
@@ -25,6 +28,7 @@ jobs:
         name: Check out repo
         uses: actions/checkout@v4
       ##################### BUILD SETUP #####################
+      # TODO: what is "actions/setup-go@v4" doing???
       -
         name: Setup Go
         uses: actions/setup-go@v4
@@ -33,6 +37,7 @@ jobs:
       -
         name: Install Dagger 
         run: go get dagger.io/dagger@latest
+      # TODO: IM HERE do I need the cli? Whats it even for?
       # -
       #   name: Install Dagger CLI
       #   run: cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | sh; cd -; }

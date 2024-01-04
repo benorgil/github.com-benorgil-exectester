@@ -21,9 +21,8 @@
         - type text and ENTER
 
 ## TODO List  ##
-- everything should probably be private
-    - struct fields should be private too
-    - Review package level vars
+- Learn about gh actions more
+- Sonar
 - Review my use of pointers
 - Fix exitcode test
 
