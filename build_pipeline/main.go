@@ -19,7 +19,7 @@ func main() {
 	// https://stackoverflow.com/questions/60516923/logging-unhandled-golang-panics
 	defer func() {
 		if r := recover(); r != nil {
-			bc.logger.Error("Captured panic: %v", r, debug.Stack())
+			bc.logger.Error("Captured panic: %v", r, string(debug.Stack()))
 			os.Exit(1)
 		}
 	}()
