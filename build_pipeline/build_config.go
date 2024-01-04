@@ -27,7 +27,7 @@ type BuildConfig struct {
 	builderImage string
 	// Name of compiled exe
 	exeName string
-	// Build artifact directory
+	// The directory where artifacts will be copied
 	buildDir string
 	// The working dir project will be copied to inside container
 	workDir string
@@ -62,7 +62,7 @@ func GetConfig() *BuildConfig {
 	bc.builderImage = "golang:latest"
 	bc.exeName = "et"
 	bc.buildDir = "build"
-	bc.buildDir = "/src"
+	bc.workDir = "/src"
 	bc.coverageReport = "./build/cov.out"
 	bc.logger = configs.FallbackLogger
 	bc.testArgExePathEnvVar = configs.TestArgExePath
