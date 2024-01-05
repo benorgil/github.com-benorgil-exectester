@@ -16,6 +16,10 @@ jobs:
     # To run inside of a container on the github hosted VM
     # container:
     #     image: golang:1.21.5-bullseye
+    permissions:
+        # Test publisher requires these perms
+        checks: write
+        pull-requests: write
     steps:
       -
         name: Echo Build Info
