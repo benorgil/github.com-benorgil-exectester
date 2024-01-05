@@ -108,6 +108,11 @@ func test(ctx context.Context, bc *BuildConfig) error {
 
 	// Run test suite
 	test := golang.WithEnvVariable(bc.testArgExePathEnvVar, bc.testArgExePath)
+	// Install testing tools
+	test = test.WithExec([]string{"go", "install", "gotest.tools/gotestsum@latest"})
+	// Get unit test run report
+	test = test.WithExec([]string{"gotestsum", "--junitfile=" + bc.unitTestReport})
+	// Get coverage report
 	test = test.WithExec([]string{"go", "test", "./...", "-coverprofile=" + bc.coverageReport})
 
 	// get reference to build output directory in container

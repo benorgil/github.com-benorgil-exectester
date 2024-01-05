@@ -31,6 +31,8 @@ type BuildConfig struct {
 	buildDir string
 	// The working dir project will be copied to inside container
 	workDir string
+	// Unit test execution report (passed/failed)
+	unitTestReport string
 	// Coverage report path
 	coverageReport string
 	// The env var integration tests look for to get the path of exe
@@ -63,6 +65,7 @@ func GetConfig() *BuildConfig {
 	bc.exeName = "et"
 	bc.buildDir = "build"
 	bc.workDir = "/src"
+	bc.unitTestReport = "./build/unit-tests.xml"
 	bc.coverageReport = "./build/cov.out"
 	bc.logger = configs.FallbackLogger
 	bc.testArgExePathEnvVar = configs.TestArgExePath

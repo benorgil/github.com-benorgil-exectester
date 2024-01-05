@@ -36,12 +36,14 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: '>=1.20'
+      # TODO maybe just put dagger install inside make target
       -
         name: Install Dagger 
         run: go get dagger.io/dagger@latest
 
       ##################### BUILD #####################
-      - name: Dagger Build
+      -
+        name: Dagger Build
         run: |
             make
       # TODO: IM HERE do I need the cli? Whats it even for?
@@ -49,3 +51,12 @@ jobs:
       #   run: cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | sh; cd -; }
       # - name: Run Dagger pipeline
       #   run: dagger run go run main.go
+
+      ##################### REPORT #####################
+      -
+        name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            build/unit-tests.xml
