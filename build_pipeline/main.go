@@ -25,14 +25,12 @@ func main() {
 	}()
 
 	if err := build(context.Background(), bc); err != nil {
-		// If the build fails consider entire pipeline failed and
-		// halt immediately
 		panic(err)
 	}
 
 	if err := test(context.Background(), bc); err != nil {
 		bc.logger.Error(err.Error())
-		// TODO: I don't want to panic I want to publish test results
+		panic(err)
 	}
 }
 
