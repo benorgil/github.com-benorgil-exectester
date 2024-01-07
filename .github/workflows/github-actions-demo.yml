@@ -1,4 +1,4 @@
-name: GitHub Actions Demo
+name: Exectester
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 
 on:
@@ -50,7 +50,7 @@ jobs:
 
       ##################### BUILD #####################
       -
-        name: Dagger Build
+        name: Build and Test
         run: |
             make
 

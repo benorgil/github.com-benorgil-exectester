@@ -9,10 +9,10 @@ all: build
 
 .PHONY: build
 build:
-	# TODO: should I use the cli?
 	# Execute Dagger pipeline
-	# go run build_pipeline/*.go
-	dagger run go run build_pipeline/*.go
+	go run build_pipeline/*.go
+	# TODO: should I use the cli?
+	# dagger run go run build_pipeline/*.go
 
 ############## For testing execution manually ##############
 .PHONY: testrun
