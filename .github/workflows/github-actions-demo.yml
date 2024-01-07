@@ -30,9 +30,11 @@ jobs:
             echo "github.repository - ${{ github.repository }}"
             echo "github.workspace - ${{ github.workspace }}"
             echo "job.status - ${{ job.status }}"
+
       -
         name: Check out repo
         uses: actions/checkout@v4
+
       ##################### BUILD SETUP #####################
       # TODO: what is "actions/setup-go@v4" doing???
       -
@@ -43,17 +45,14 @@ jobs:
       -
         name: Install Dagger 
         run: go get dagger.io/dagger@latest
+      - name: Install Dagger CLI
+        run: cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | sh; cd -; }
 
       ##################### BUILD #####################
       -
         name: Dagger Build
         run: |
             make
-      # TODO: IM HERE do I need the cli? Whats it even for?
-      # - name: Install Dagger CLI
-      #   run: cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | sh; cd -; }
-      # - name: Run Dagger pipeline
-      #   run: dagger run go run main.go
 
       ##################### REPORT #####################
       -
