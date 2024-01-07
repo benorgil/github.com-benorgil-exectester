@@ -261,18 +261,23 @@ func (ts *ExecTestSuite) TestSigTermTimeout() {
 
 // This test highlights how --timeout is somewhat best effort
 // If timeout is not divisible by repeat_interval it could timeout a second
-// or two off
+// or two off and even if its not it could still be off a little
 func (ts *ExecTestSuite) TestRepeatInterval() {
 	timeoutArg := 2 // Must be Divisible by repeatIntervalArg for test to pass
 	repeatIntervalArg := 1
 
+	// Allow test to pass if timeout is only a little bit off
 	expectedTimeout := (time.Duration(timeoutArg) * time.Second).Round(time.Second)
+	expectedTimeouts := []time.Duration{
+		expectedTimeout, expectedTimeout + time.Second,
+	}
+
 	now := time.Now().Round(time.Second)
 	cmd, _ := ts.ExecuteCmd([]string{"--stdout=o", "--repeat_forever",
 		fmt.Sprintf("--repeat_interval=%s", strconv.Itoa(repeatIntervalArg)),
 		fmt.Sprintf("--timeout=%s", strconv.Itoa(timeoutArg))})
 	ts.Equal("o", cmd.StdOut[0])
-	ts.Equal(expectedTimeout, time.Since(now).Round(time.Second))
+	ts.Contains(expectedTimeouts, time.Since(now).Round(time.Second))
 }
 
 func (ts *ExecTestSuite) TestOutputFormat() {
