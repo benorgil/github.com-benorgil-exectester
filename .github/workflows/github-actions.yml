@@ -22,12 +22,26 @@ jobs:
         pull-requests: write
     steps:
 
-##### TODO: IM HERE test OIDC auth
 
-      -
+
+
+##### TODO: IM HERE test OIDC auth
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v0.4.0'
+      with:
+        token_format: 'access_token'
+        workload_identity_provider: "${{ secrets.WORKLOAD_IDENTITY_PROVIDER_DEV }}"
+        service_account: "${{ secrets.GSA_NAME_DEV }}"
+    # TODO scripts have project and secret in them
+    -
         name: testing
         run: |
-            echo "${{ secrets.TEST_01 }}"
+            gcloud secrets versions access 1 --secret="${{ secrets.TEST_01 }}" --project="${{ secrets.TEST_02 }}"
+
+
+
+
 
 #       -
 #         name: Echo Build Info
