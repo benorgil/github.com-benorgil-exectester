@@ -4,6 +4,9 @@
 The pipeline inject a config struct into all the pipeline funcs.
 It gets config to generate the struct from env vars and even this
 apps own shared packages.
+
+Inside an organization components of this pipeline could be broken out
+into shared packages and reused.
 */
 package main
 
@@ -15,18 +18,16 @@ import (
 	"github.com/benorgil/exectester/configs"
 )
 
-var (
-	oses   = []string{"linux", "darwin", "windows"}
-	arches = []string{"amd64", "arm64"}
-)
-
-// All build config is collected in this struct for organizational
-// purposes
-type BuildConfig struct {
-	// The container image to use to build this project
+// The fields of this struct could probably be shared
+// across many repos
+type SharedBuildConfig struct {
+	// The container image used to build this project
 	builderImage string
-	// Name of compiled exe
-	exeName string
+	// The container image used run sonar scans
+	sonarScannerImage string
+	// TODO IM HERE sonar scanner token
+	// The scanner token will be injected via env var during build pipeline
+	sonarScannerTokenEnvVar string
 	// The directory where artifacts will be copied
 	buildDir string
 	// The working dir project will be copied to inside container
@@ -35,6 +36,17 @@ type BuildConfig struct {
 	unitTestReport string
 	// Coverage report path
 	coverageReport string
+}
+
+// The fields of this struct are specific to this project's build
+// pipeline
+type ExecTesterBuildConfig struct {
+	// OSs to generate golang exe for
+	oses []string
+	// Architectures for each OS to generate golang exe for
+	arches []string
+	// Name of compiled exe
+	exeName string
 	// The env var integration tests look for to get the path of exe
 	testArgExePathEnvVar string
 	// The actual path of the exe
@@ -42,6 +54,13 @@ type BuildConfig struct {
 	// The logger build automation will use for output.
 	// Uses the "fallback" logger because we don't need anything custom here
 	logger *slog.Logger
+}
+
+// All build config is finally collected in this struct
+// for organizational purposes
+type BuildConfig struct {
+	SharedBuildConfig
+	ExecTesterBuildConfig
 }
 
 // Checks arch to get location of compiled exe some integration tests need
@@ -62,11 +81,15 @@ func GetConfig() *BuildConfig {
 	bc := new(BuildConfig)
 
 	bc.builderImage = "golang:latest"
-	bc.exeName = "et"
+	bc.sonarScannerImage = "sonarsource/sonar-scanner-cli:5"
 	bc.buildDir = "build"
 	bc.workDir = "/src"
 	bc.unitTestReport = "./build/unit-tests.xml"
 	bc.coverageReport = "./build/cov.out"
+
+	bc.oses = []string{"linux", "darwin", "windows"}
+	bc.arches = []string{"amd64", "arm64"}
+	bc.exeName = "et"
 	bc.logger = configs.FallbackLogger
 	bc.testArgExePathEnvVar = configs.TestArgExePath
 	bc.testArgExePath = getTestExePath()

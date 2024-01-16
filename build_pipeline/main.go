@@ -32,10 +32,17 @@ func main() {
 		bc.logger.Error(err.Error())
 		panic(err)
 	}
+
+	// TODO: IM HERE sonar
+	// if err := lint(context.Background(), bc); err != nil {
+	// 	bc.logger.Error(err.Error())
+	// 	panic(err)
+	// }
+
 }
 
 func build(ctx context.Context, bc *BuildConfig) error {
-	bc.logger.Info("Building with Dagger")
+	bc.logger.Info("Building")
 
 	// initialize Dagger client
 	client, err := dagger.Connect(ctx, dagger.WithLogOutput(os.Stderr))
@@ -46,18 +53,15 @@ func build(ctx context.Context, bc *BuildConfig) error {
 
 	// get reference to the local project
 	src := client.Host().Directory(".")
-
 	// create empty directory to put build outputs
 	outputs := client.Directory()
-
 	// get `golang` image
 	golang := client.Container().From(bc.builderImage)
-
 	// mount cloned repository into `golang` image
 	golang = golang.WithDirectory(bc.workDir, src).WithWorkdir(bc.workDir)
 
-	for _, goos := range oses {
-		for _, goarch := range arches {
+	for _, goos := range bc.oses {
+		for _, goarch := range bc.arches {
 			// create a directory for each os and arch
 			path := fmt.Sprintf("%s/%s/%s/", bc.buildDir, goos, goarch)
 			exePath := path + bc.exeName
@@ -83,7 +87,7 @@ func build(ctx context.Context, bc *BuildConfig) error {
 }
 
 func test(ctx context.Context, bc *BuildConfig) error {
-	bc.logger.Info("Testing with Dagger")
+	bc.logger.Info("Generating Test Reports")
 
 	// initialize Dagger client
 	client, err := dagger.Connect(ctx, dagger.WithLogOutput(os.Stderr))
@@ -94,13 +98,10 @@ func test(ctx context.Context, bc *BuildConfig) error {
 
 	// get reference to the local project
 	src := client.Host().Directory(".")
-
 	// create empty directory to put build outputs
 	outputs := client.Directory()
-
 	// get `golang` image
 	golang := client.Container().From(bc.builderImage)
-
 	// mount cloned repository into `golang` image
 	golang = golang.WithDirectory(bc.workDir, src).WithWorkdir(bc.workDir)
 
@@ -123,5 +124,33 @@ func test(ctx context.Context, bc *BuildConfig) error {
 		return err
 	}
 
+	return nil
+}
+
+func lint(ctx context.Context, bc *BuildConfig) error {
+	bc.logger.Info("Linting")
+
+	// initialize Dagger client
+	client, err := dagger.Connect(ctx, dagger.WithLogOutput(os.Stderr))
+	if err != nil {
+		return err
+	}
+	defer client.Close()
+
+	// get reference to the local project
+	src := client.Host().Directory(".")
+
+	// get official sonar scanner image
+	golang := client.Container().From(bc.sonarScannerImage)
+	// mount cloned repository into `golang` image
+	golang = golang.WithDirectory(bc.workDir, src).WithWorkdir(bc.workDir)
+
+	// Run sonar scan, cwd is already set to the project root
+	golang.WithExec([]string{
+		//"/opt/sonar-scanner/bin/sonar-scanner " +
+		"-Dproject.settings=" + bc.workDir + "/sonar-project.properties",
+	}).Sync(ctx)
+
+	// TODO: IM HERE
 	return nil
 }

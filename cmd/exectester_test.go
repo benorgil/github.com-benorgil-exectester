@@ -295,7 +295,6 @@ func SetExitCodeFlag() {
 }
 
 // // TODO this decided to stop working for some reason
-// // TODO IM HERE try running it through the dagger pipeline maybe it works there
 // // For capturing exit code, call go test itself as a subprocess that then calls SetExitCode()
 // // which calls the Cobra command passing it the --exitcode flag... whew!
 // // https://stackoverflow.com/questions/26225513/how-to-test-os-exit-scenarios-in-go

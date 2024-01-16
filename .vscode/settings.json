@@ -1,0 +1,11 @@
+// Vscode settings are commited to source to be shared
+// For users specific settings create a .code-workspace in this project (that is git ignored)
+// See: https://github.com/microsoft/vscode/issues/37519
+{
+    // This project is public. I _think_ anyone can create a sonarcloud token for their own
+    // sonarcloud user account and use the vscode plugin in connected mode (need to confirm)
+    "sonarlint.connectedMode.project": {
+        "connectionId": "Public SonarCloud Instance",
+        "projectKey": "benorgil_github.com-benorgil-exectester"
+    }
+}

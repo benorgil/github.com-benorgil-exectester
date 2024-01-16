@@ -11,7 +11,7 @@ all: build
 build:
 	# Execute Dagger pipeline
 	go run build_pipeline/*.go
-	# TODO: should I use the cli?
+	# TODO: should I use the cli? the integration tests and gotestsum fail if I do for some reason
 	# dagger run go run build_pipeline/*.go
 
 ############## For testing execution manually ##############

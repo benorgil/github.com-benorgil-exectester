@@ -22,8 +22,9 @@
 
 ## TODO List  ##
 - Learn about gh actions more
-    - spin up minikube with dagger
 - Sonar
+- Get dagger working in vscode devcontainer
+- spin up minikube with dagger
 - Review my use of pointers
 - Fix exitcode test
 
