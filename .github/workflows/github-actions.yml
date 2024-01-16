@@ -38,6 +38,12 @@ jobs:
     -
         name: testing
         run: |
+            gcloud auth list
+
+
+    -
+        name: testing
+        run: |
             gcloud secrets versions access 1 --secret="${{ secrets.TEST_01 }}" --project="${{ secrets.TEST_02 }}"
 
 
